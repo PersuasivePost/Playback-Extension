@@ -6,23 +6,42 @@
   <title>Speed Controller</title>
   <link rel="stylesheet" href="popup.css">
 </head>
-<body>
-  <h2>Video Speed</h2>
-  <button class="speed-btn" data-speed="0.5">0.5x</button>
-  <button class="speed-btn" data-speed="1">1x (Normal)</button>
-  <button class="speed-btn" data-speed="1.5">1.5x</button>
-  <button class="speed-btn" data-speed="2">2x</button>
-  <button class="speed-btn" data-speed="3">3x</button>
-  <button class="speed-btn" data-speed="5">5x</button>
-  <button class="speed-btn" data-speed="10">10x</button>
-  <button class="speed-btn" data-speed="16">16x</button>
-  
-  <!-- Reset Button -->
-  <button id="reset">Reset</button>
 
-  <!-- Custom Speed Input -->
-  <input type="number" id="customSpeed" placeholder="Custom Speed" step="0.1" min="0.1">
-  <button id="setCustom">Set</button>
+<body>
+  <header>
+    <h2>Video Speed</h2>
+
+    <div class="theme-toggle">
+      <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="speed-grid">
+      <button class="speed-btn" data-speed="0.5">0.5x</button>
+      <button class="speed-btn" data-speed="1">1x</button>
+      <button class="speed-btn" data-speed="1.5">1.5x</button>
+      <button class="speed-btn" data-speed="2">2x</button>
+      <button class="speed-btn" data-speed="3">3x</button>
+      <button class="speed-btn" data-speed="5">5x</button>
+      <button class="speed-btn" data-speed="10">10x</button>
+      <button class="speed-btn" data-speed="16">16x</button>
+    </div>
+
+    <div class="control-section">
+      <button id="reset">Reset</button>
+    </div>
+
+    <div class="custom-speed">
+      <div class="input-group">
+        <input type="number" id="customSpeed" placeholder="Custom Speed" step="0.1" min="0.1">
+        <button id="setCustom">Set</button>
+      </div>
+    </div>
+  </div>
 
   <script src="popup.js"></script>
 </body>
