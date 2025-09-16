@@ -26,6 +26,10 @@
 3. **Select desired speed** from the preset options or enter a custom value
 4. **Enjoy your video** at the perfect speed
 
+### Persistent speed across videos
+
+Once you set a playback speed using the popup, the extension remembers that value and will automatically apply it to subsequent videos and navigations (including YouTube next video / SPA navigations). To reset to normal speed, use the Reset button in the popup (or set speed to `1`).
+
 ### Controls
 - Speed Presets - Quick access to common speeds (0.5x to 16x)
 - Custom Speed - Enter any precise value

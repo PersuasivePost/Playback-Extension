@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Video Speed Controller",
-    "version": "1.1",
+    "version": "1.2",
     "description": "Control playback speed beyond 2x on any website.",
     "permissions": ["tabs", "activeTab", "storage", "scripting"],
     "host_permissions": ["*://*/*"],

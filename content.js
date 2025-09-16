@@ -2,7 +2,11 @@
 function updateSpeed(speed) {
     const videos = document.querySelectorAll("video");
     videos.forEach(video => {
-      video.playbackRate = speed; // Set speed (supports 3x, 5x, etc.)
+      try {
+        video.playbackRate = speed; // Set speed (supports 3x, 5x, etc.)
+      } catch (e) {
+        console.warn('Failed to set playbackRate on video', e);
+      }
     });
   }
   
@@ -13,4 +17,51 @@ function updateSpeed(speed) {
       sendResponse({ status: "success" });
     }
   });
+
+// Apply saved speed on load and when new videos appear
+function applySavedSpeed() {
+  // Default to 1 if not set
+  chrome.storage.local.get(['lastSpeed'], (result) => {
+    const speed = (result && result.lastSpeed) ? result.lastSpeed : 1;
+    updateSpeed(speed);
+  });
+}
+
+// Run once on initial load
+applySavedSpeed();
+
+// Observe DOM for new video elements (works with SPA sites like YouTube)
+const observer = new MutationObserver((mutations) => {
+  let found = false;
+  for (const m of mutations) {
+    // If any added nodes contain a video, apply saved speed
+    for (const node of m.addedNodes) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.tagName === 'VIDEO' || node.querySelector?.('video')) {
+          found = true;
+          break;
+        }
+      }
+    }
+    if (found) break;
+  }
+  if (found) {
+    applySavedSpeed();
+  }
+});
+
+observer.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+// Some sites (like YouTube) use SPA navigation; listen to common navigation events
+try {
+  window.addEventListener('popstate', () => {
+    // small delay to allow new elements to be added
+    setTimeout(applySavedSpeed, 200);
+  });
+  // YouTube fires these custom events during navigation
+  window.addEventListener('yt-navigate-finish', () => setTimeout(applySavedSpeed, 200));
+  window.addEventListener('spfdone', () => setTimeout(applySavedSpeed, 200));
+} catch (e) {
+  console.warn('Failed to attach navigation listeners', e);
+}
   

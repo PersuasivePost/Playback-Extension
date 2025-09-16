@@ -39,16 +39,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to change playback speed
   function changeSpeed(speed) {
+    // Save speed to storage so content script (and future pages) can apply it
+    try {
+      chrome.storage.local.set({ lastSpeed: speed });
+    } catch (e) {
+      console.warn('chrome.storage not available in popup context', e);
+    }
+
+    // Send message to active tab to apply immediately
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]?.id) {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id },
-          function: setPlaybackSpeed,
-          args: [speed]
-        }, (results) => {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'changeSpeed', speed }, (resp) => {
           if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError.message);
-            showNotification("Error: " + chrome.runtime.lastError.message);
+            // Fallback to executeScript if content script wasn't injected for some reason
+            chrome.scripting.executeScript({
+              target: { tabId: tabs[0].id },
+              function: setPlaybackSpeed,
+              args: [speed]
+            }, (results) => {
+              if (chrome.runtime.lastError) {
+                console.error(chrome.runtime.lastError.message);
+                showNotification("Error: " + chrome.runtime.lastError.message);
+              } else {
+                showNotification(`Playback speed set to ${speed}x`);
+              }
+            });
           } else {
             showNotification(`Playback speed set to ${speed}x`);
           }
