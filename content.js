@@ -12,10 +12,22 @@ function updateSpeed(speed) {
   
   // Listen for messages from popup.js
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "changeSpeed") {
-      updateSpeed(message.speed);
-      sendResponse({ status: "success" });
-    }
+      if (message.action === "changeSpeed") {
+        updateSpeed(message.speed);
+        sendResponse({ status: "success" });
+      }
+
+      if (message.action === 'popupOpened') {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(v => {
+          try {
+            if (v.paused) {
+              const p = v.play();
+              if (p && p.catch) p.catch(() => {});
+            }
+          } catch (e) {}
+        });
+      }
   });
 
 // Apply saved speed on load and when new videos appear
@@ -33,14 +45,17 @@ applySavedSpeed();
 // Observe DOM for new video elements (works with SPA sites like YouTube)
 const observer = new MutationObserver((mutations) => {
   let found = false;
-  for (const m of mutations) {
-    // If any added nodes contain a video, apply saved speed
-    for (const node of m.addedNodes) {
+  for (var mi = 0; mi < mutations.length; mi++) {
+    var m = mutations[mi];
+    for (var ni = 0; ni < m.addedNodes.length; ni++) {
+      var node = m.addedNodes[ni];
       if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.tagName === 'VIDEO' || node.querySelector?.('video')) {
-          found = true;
-          break;
-        }
+        try {
+          if (node.tagName === 'VIDEO' || node.querySelector && node.querySelector('video')) {
+            found = true;
+            break;
+          }
+        } catch (e) {}
       }
     }
     if (found) break;
