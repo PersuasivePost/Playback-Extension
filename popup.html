@@ -5,49 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Speed Controller</title>
   <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-  <header>
-    <h2>Video Speed</h2>
-
-    <div class="theme-toggle">
-      <label class="switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider round"></span>
-      </label>
+  <div class="yt-speed-controller">
+    <div class="header">
+      <div id="currentLabel">1.00x</div>
     </div>
-  </header>
-
-  <div class="container">
-    <div class="slider-section">
-      <div class="slider-labels">
-        <span id="minLabel">0x</span>
-        <span id="currentLabel">8x</span>
-        <span id="maxLabel">16x</span>
+    
+    <div class="slider-row">
+      <button id="minusBtn" class="circle-btn">
+        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M5 11h14v2H5z"/></svg>
+      </button>
+      <div class="slider-container">
+        <input type="range" id="speedSlider" min="0.1" max="16" step="0.05" value="1.0">
       </div>
-      <input type="range" id="speedSlider" min="0" max="16" step="0.1" value="8" list="speedTicks">
-      <datalist id="speedTicks">
-        <option value="0"></option>
-        <!-- <option value="0.5"></option> -->
-        <option value="1"></option>
-        <option value="1.5"></option>
-        <option value="2"></option>
-        <option value="3"></option>
-        <!-- <option value="5"></option> -->
-        <option value="6"></option>
-        <option value="8"></option>
-        <!-- <option value="10"></option> -->
-        <option value="12"></option>
-        <option value="16"></option>
-      </datalist>
+      <button id="plusBtn" class="circle-btn">
+        <svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"/></svg>
+      </button>
+    </div>
+    
+    <div class="presets-grid">
+      <div class="preset-col">
+        <button class="preset-btn" data-value="1.0">1.0</button>
+        <span class="preset-sub" style="visibility: visible;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="1.25">1.25</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="1.5">1.5</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="2.0">2.0</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="2.5">2.5</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="3.0">3.0</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="3.5">3.5</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" data-value="4.0">4.0</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
+      <div class="preset-col">
+        <button class="preset-btn" id="customToggleBtn">Custom</button>
+        <span class="preset-sub" style="visibility: hidden;">Normal</span>
+      </div>
     </div>
 
-    <div class="control-section">
-      <button id="reset">Reset</button>
+    <!-- Hidden Custom Input that toggles on click -->
+    <div class="custom-input-row" id="customInputWrapper">
+      <input type="number" id="customSpeedInput" min="0.1" max="16.0" step="0.1" value="1.0" placeholder="e.g. 3.5">
+      <button id="applyCustomBtn">OK</button>
     </div>
   </div>
-
+  
   <script src="popup.js"></script>
 </body>
 </html>
